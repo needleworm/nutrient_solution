@@ -1,0 +1,7 @@
+&component_names   *insert  *star  *for *each *Terms
+k1 = 0.243
+k2 = 0.423
+
+&[HNO3]   *-k1[HNO3]  *k2[H+][NO3-]
+&[H+]     *k1[HNO3]   *-k2[H+][NO3-]
+&[NO3-]   *k1[HNO3]   *-k2[H+][NO3-]
