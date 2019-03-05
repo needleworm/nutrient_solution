@@ -14,6 +14,9 @@ class Network():
         self.Xs = np.zeros(len(self.vesicles))
         self.record = []
 
+        for i, el in enumerate(self.vesicles):
+            self.Xs[i] = el.value
+
     def __repr__(self):
         return "system_simulator Network object with " + str(len(self.vesicles)) + " nodes"
 
@@ -25,7 +28,7 @@ class Network():
         for line in network_file:
             if line[0] == 'k':
                 k, value = line.strip().split(" = ")
-                self.ks[k] = value
+                self.ks[k] = float(value.strip())
             else:
                 break
 
@@ -72,6 +75,16 @@ class Network():
 
             self.vesicles.append(Vesicle(terms, initial_value))
 
+    def _calc_gradient(self):
+        gradient = np.zeros_like(self.Xs)
+        for i, el in enumerate(self.vesicles):
+            gradient[i] = el.calc_gradient(self.Xs, self.nameidx)
+        return gradient
+
+    def synchronous_update(self):
+        gradient = self._calc_gradient()
+        self.record.append(np.copy(self.Xs))
+        self.Xs += gradient
 
 class Terms():
     def __init__(self, coefficient, elements):
@@ -81,10 +94,10 @@ class Terms():
     def __repr__(self):
         return str(self.coefficient) + " " + str(self.elements)
 
-    def term(self, Xs):
+    def term(self, Xs, nameidx):
         retval = self.coefficient
         for el in self.elements:
-            retval *= Xs[el]
+            retval *= Xs[nameidx[el]]
         return retval
 
 
@@ -96,10 +109,10 @@ class Vesicle():
     def __repr__(self):
         return str(self.terms)
 
-    def calc_gradient(self, Xs):
+    def calc_gradient(self, Xs, nameidx):
         dX_dt = 0
         for term in self.terms:
-            dX_dt += term.term(Xs)
+            dX_dt += term.term(Xs, nameidx)
 
         dX = dX_dt * dt
         self.value += dX
