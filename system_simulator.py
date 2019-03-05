@@ -14,6 +14,9 @@ class Network():
         self.Xs = np.zeros(len(self.vesicles))
         self.record = []
 
+    def __repr__(self):
+        return "system_simulator Network object with " + str(len(vesicles)) + " nodes"
+
     def _read_system(self, filename):
         network_file = open(filename, 'r')
         network_file.readline() # remove header
@@ -44,15 +47,15 @@ class Network():
 
             splt = line.split("*")
             name = splt[0][1:].strip()
-            nameidx[name] = count
+            self.nameidx[name] = count
             count += 1
 
             splt = splt[1:]
-            temrs = []
+            terms = []
             for el in splt:
                 if "k" not in el:
                     print(line + " has wrong term " + el)
-                exit(1)
+                    exit(1)
 
                 tokens = el.strip().split("[")
                 coef = tokens[0]
@@ -75,6 +78,9 @@ class Terms():
         self.coefficient = coefficient
         self.elements = elements # (idx_1, idx_2, idx_3 ... idx_n)
 
+    def __repr__(self):
+        return str(self.coefficient) + " " + str(self.elements)
+
     def term(self, Xs):
         retval = self.coefficient
         for el in self.elements:
@@ -86,6 +92,9 @@ class Vesicle():
     def __init__(self, terms, initial_value=0):
         self.value = initial_value
         self.terms = terms
+
+    def __repr__(self):
+        return str(self.terms)
 
     def calc_gradient(self, Xs):
         dX_dt = 0
