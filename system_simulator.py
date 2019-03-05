@@ -15,7 +15,7 @@ class Network():
         self.record = []
 
     def __repr__(self):
-        return "system_simulator Network object with " + str(len(vesicles)) + " nodes"
+        return "system_simulator Network object with " + str(len(self.vesicles)) + " nodes"
 
     def _read_system(self, filename):
         network_file = open(filename, 'r')
