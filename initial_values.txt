@@ -1,7 +1,7 @@
-&component_names   *insert  *star  *for *each *Terms
-k1 = 0.243
-k2 = 0.423
+&component_names   *insert  *star  *for *each *Terms  $initial_mol
+k1 = 0.143
+k2 = 0.42
 
-&[HNO3]   *-k1[HNO3]  *k2[H+][NO3-]
+&[HNO3]   *-k1[HNO3]  *k2[H+][NO3-]   $1.42
 &[H+]     *k1[HNO3]   *-k2[H+][NO3-]
 &[NO3-]   *k1[HNO3]   *-k2[H+][NO3-]
