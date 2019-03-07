@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import random
 
 dt = float("1e-4")
 
@@ -106,13 +107,13 @@ class Network():
             if count % 1000 == 0 :
                 print(str(count) + "th iteration\n>> current mse is : " + str(mse))
             count += 1
-            if mse < float("1e-21"):
+            if mse < float("1e-14") or math.isnan(mse):
                 break
             previous = np.copy(self.Xs)
 
     def show_result(self):
         for name in self.nameidx:
-            print(name + "\t: " + str(self.Xs[self.nameidx[name]]))
+            print(name + "%5s: "%"\t" + str(self.Xs[self.nameidx[name]]))
         print("pH is\t: " + str(-math.log10(float("1e-7") + self.Xs[self.nameidx["[H+]"]])))
 
 class Terms():
