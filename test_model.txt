@@ -1,0 +1,49 @@
+&component_names   *insert  *star  *for *each *Terms  $initial_mol
+k1 = 1611
+k2 = 1
+k3 = 10.57203812
+k4 = 1
+k5 = 23
+k6 = 0
+k7 = 0.00725
+k8 = 1
+k9 = 6.31e-8
+k10 = 1
+k11 = 3.98e-13
+k12 = 1
+k13 = 1.00019e-7
+k14 = 1
+k15 = 1.20366e-19
+k16 = 1
+
+&[Ca(NO3)2] *-k1[Ca(NO3)2]  *k2[Ca++][NO3-][NO3-] $8
+&[Ca++] *k1[Ca(NO3)2] *-k2[Ca++][NO3-][NO3-]
+&[NO3-] *k1[Ca(NO3)2] *-k2[Ca++][NO3-][NO3-]
+
+&[NH42HPO4] *-k3[NH42HPO4]  *k4[NH4+][H2PO4-] $2
+&[NH4+] *k3[NH42HPO4]  *-k4[NH4+][H2PO4-]
+&[H2PO4-] *k3[NH42HPO4]  *-k4[NH4+][H2PO4-]
+
+&[HNO3] *-k5[HNO3]  *k6[H+][NO3-]
+&[H+] *k5[HNO3] *-k6[H+][NO3-]
+&[NO3-] *k5[HNO3] *-k6[H+][NO3-]
+
+&[H3PO4]  *-k7[H3PO4] *k8[H+][H2PO4-]
+&[H+]  *k7[H3PO4] *-k8[H+][H2PO4-]
+&[H2PO4-]  *k7[H3PO4] *-k8[H+][H2PO4-]
+
+&[H2PO4-] *-k9[H2PO4-]  *k10[H+][HPO4--]
+&[H+] *k9[H2PO4-]  *-k10[H+][HPO4--]
+&[HPO4--] *k9[H2PO4-]  *-k10[H+][HPO4--]
+
+&[HPO4--] *-k11[HPO4--] *k12[H+][PO4---]
+&[H+] *k11[HPO4--] *-k12[H+][PO4---]
+&[PO4---] *k11[HPO4--] *-k12[H+][PO4---]
+
+&[CaHPO4] *-k13[CaHPO4]  *k14[Ca++][HPO4--]
+&[Ca++] *k13[CaHPO4]  *-k14[Ca++][HPO4--]
+&[HPO4--] *k13[CaHPO4]  *-k14[Ca++][HPO4--]
+
+&[Ca3(PO4)2]  *-k15[Ca3(PO4)2]  *k16[Ca++][Ca++][Ca++][PO4---][PO4---]
+&[Ca++] *k15[Ca3(PO4)2]  *-k16[Ca++][Ca++][Ca++][PO4---][PO4---]
+&[PO4---] *k15[Ca3(PO4)2]  *-k16[Ca++][Ca++][Ca++][PO4---][PO4---]
