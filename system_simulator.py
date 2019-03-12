@@ -2,7 +2,9 @@ import numpy as np
 import math
 import random
 
-dt = float("1e-4")
+dt = 1e-4
+#Avogadro_constant = 6.02214129e23
+Avogadro_constant = 1
 
 Vesicles = []
 
@@ -33,13 +35,21 @@ class Network():
                 k, value = line.strip().split("=")
                 self.ks[k.strip()] = float(value.strip())
             elif line[0] == "&":
-
                 initial_value = 0
+                ion_molecular_weight = 0
+                is_ion = False
+                if "#" in line:
+                    line = line.split("#")[0].strip()
+                    is_ion = True
+
+                if "@" in line:
+                    line, value = line.split("@")
+                    ion_molecular_weight = float(value.strip())
 
                 if "$" in line:
                     line, value = line.split("$")
                     try:
-                        initial_value = float(value.strip())
+                        initial_value = float(value.strip()) * Avogadro_constant
                     except:
                         print (line + "  has wrong initial_mol indication")
                         exit(1)
@@ -70,7 +80,7 @@ class Network():
                 if name not in self.nameidx:
                     self.nameidx[name] = count
                     count += 1
-                    self.vesicles.append(Vesicle(terms, initial_value))
+                    self.vesicles.append(Vesicle(terms, initial_value, ion_molecular_weight, is_ion))
                 else:
                     self.vesicles[self.nameidx[name]].terms += terms
             else:
@@ -85,10 +95,10 @@ class Network():
 
     def synchronous_update(self):
         gradient = self._calc_gradient()
-        self.record.append(np.copy(self.Xs))
+        #self.record.append(np.copy(self.Xs))
         self.Xs += gradient
         for i in range(len(self.Xs)):
-            if self.Xs[i] < float("1e-32") :
+            if self.Xs[i] < 1e-300 :
                 self.Xs[i] = 0
 
     def converge(self):
@@ -104,17 +114,32 @@ class Network():
                     continue
             error = self.Xs - previous
             mse = np.sum(error * error)
-            if count % 1000 == 0 :
-                print(str(count) + "th iteration\n>> current mse is : " + str(mse))
+            if count % 100000 == 0 :
+                print(str(count * dt) + " seconds past")
+                print(str(count) + "th iteration\n>> current mse is : " + str(mse) + "\n")
+                self.record.append(np.copy(self.Xs))
+                self.show_result()
             count += 1
-            if mse < float("1e-14") or math.isnan(mse):
+            if mse < 1e-40 or math.isnan(mse):
                 break
             previous = np.copy(self.Xs)
 
     def show_result(self):
         for name in self.nameidx:
-            print(name + "%5s: "%"\t" + str(self.Xs[self.nameidx[name]]))
-        print("pH is\t: " + str(-math.log10(float("1e-7") + self.Xs[self.nameidx["[H+]"]])))
+            if not self.vesicles[self.nameidx[name]].is_ion:
+                    print("%15s@ : "%name + "  " + str(self.Xs[self.nameidx[name]]/Avogadro_constant) + " mol/L")
+            else:
+                print("%15s  : "%name + "  " + str(self.Xs[self.nameidx[name]]/Avogadro_constant) + " mol/L")
+        print("pH is\t: " + str(-math.log10(self.Xs[self.nameidx["[H+]"]])))
+        print("TDS is\t: " + str(self.calc_ppm()) + " mg/L(ppm)\n")
+
+    def calc_ppm(self):
+        total_mass = 0
+        for el in self.vesicles:
+            if not el.is_ion:
+                continue
+            total_mass += el.molecular_weight * el.value
+        return total_mass *1000
 
 class Terms():
     def __init__(self, coefficient, elements):
@@ -132,9 +157,11 @@ class Terms():
 
 
 class Vesicle():
-    def __init__(self, terms, initial_value=0):
+    def __init__(self, terms, initial_value=0, molecular_weight=0, is_ion=True):
         self.value = initial_value
         self.terms = terms
+        self.molecular_weight = molecular_weight
+        self.is_ion = is_ion
 
     def __repr__(self):
         return str(self.terms)
@@ -145,7 +172,5 @@ class Vesicle():
             dX_dt += term.term(Xs, nameidx)
 
         dX = dX_dt * dt
-        #if abs(dX) < float("1e-16"):
-        #    dX = 0
         self.value += dX
         return dX
