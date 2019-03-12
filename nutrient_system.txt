@@ -1,0 +1,122 @@
+&component_names   *insert  *star  *for *each *Terms  $initial_mol
+&component_names   *insert  *star  *for *each *Terms  $initial_mol
+
+
+k1 = -1
+k2 = -1
+&[Ca(NO3)2] *-k1[Ca(NO3)2]  *k2[Ca++][NO3-][NO3-] $8
+&[Ca++] *k1[Ca(NO3)2] *-k2[Ca++][NO3-][NO3-]
+&[NO3-] *k1[Ca(NO3)2] *-k2[Ca++][NO3-][NO3-]
+
+k3 = -1
+k4 = -1
+&[NH42HPO4] *-k3[NH42HPO4]  *k4[NH4+][H2PO4-] $2
+&[NH4+] *k3[NH42HPO4]  *-k4[NH4+][H2PO4-]
+&[H2PO4-] *k3[NH42HPO4]  *-k4[NH4+][H2PO4-]
+
+k5 = -1
+k6 = -1
+&[HNO3] *-k5[HNO3]  *k6[H+][NO3-]
+&[H+] *k5[HNO3] *-k6[H+][NO3-]
+&[NO3-] *k5[HNO3] *-k6[H+][NO3-]
+
+k7 = -1
+k8 = -1
+&[H3PO4]  *-k7[H3PO4] *k8[H+][H2PO4-]
+&[H+]  *k7[H3PO4] *-k8[H+][H2PO4-]
+&[H2PO4-]  *k7[H3PO4] *-k8[H+][H2PO4-]
+
+k9 = -1
+k10 = -1
+&[H2PO4-] *-k9[H2PO4-]  *k10[H+][HPO4--]
+&[H+] *k9[H2PO4-]  *-k10[H+][HPO4--]
+&[HPO4--] *k9[H2PO4-]  *-k10[H+][HPO4--]
+
+k11 = -1
+k12 = -1
+&[HPO4--] *-k11[HPO4--] *k12[H+][PO4---]
+&[H+] *k11[HPO4--] *-k12[H+][PO4---]
+&[PO4---] *k11[HPO4--] *-k12[H+][PO4---]
+
+k13 = -1
+k14 = -1
+&[CaHPO4] *-k13[CaHPO4]  *k14[Ca++][HPO4--]
+&[Ca++] *k13[CaHPO4]  *-k14[Ca++][HPO4--]
+&[HPO4--] *k13[CaHPO4]  *-k14[Ca++][HPO4--]
+
+k15 = -1
+k16 = -1
+&[Ca3(PO4)2]  *-k15[Ca3(PO4)2]  *k16[Ca++][Ca++][Ca++][PO4---][PO4---]
+&[Ca++] *k15[Ca3(PO4)2]  *-k16[Ca++][Ca++][Ca++][PO4---][PO4---]
+&[PO4---] *k15[Ca3(PO4)2]  *-k16[Ca++][Ca++][Ca++][PO4---][PO4---]
+
+k17 = -1
+k18 = -1
+&[KNO3] *-k17[KNO3] *k18[K+][NO3-]
+&[K+] *k17[KNO3] *-k18[K+][NO3-]
+&[NO3-] *k17[KNO3] *-k18[K+][NO3-]
+
+k19 = -1
+k20 = -1
+&[MgSO4]  *-k19[MgSO4]  *k20[Mg++][SO4--]
+&[Mg++]  *k19[MgSO4]  *-k20[Mg++][SO4--]
+&[SO4--]  *k19[MgSO4]  *-k20[Mg++][SO4--]
+
+k21 = -1
+k22 = -1
+&[CuSO4]  *-k21[CuSO4] *k22[Cu++][SO4--]
+&[Cu++]  *k21[CuSO4] *-k22[Cu++][SO4--]
+&[SO4--]  *k21[CuSO4] *-k22[Cu++][SO4--]
+
+k23 = -1
+k24 = -1
+&[MnSO4]  *-k23[MnSO4] *k24[Mn++][SO4--]
+&[Mn++]  *k23[MnSO4] *-k24[Mn++][SO4--]
+&[SO4--]  *k23[MnSO4] *-k24[Mn++][SO4--]
+
+k25 = -1
+k26 = -1
+&[ZnSO4]  *-k25[ZnSO4]  *k26[Zn++][SO4--]
+&[Zn++]  *k25[ZnSO4]  *-k26[Zn++][SO4--]
+&[SO4--]  *k25[ZnSO4]  *-k26[Zn++][SO4--]
+
+k27 = -1
+k28 = -1
+&[H3BO3]  *-k27[H3BO3]  *k28[H+][H2BO3-]
+&[H+]  *k27[H3BO3]  *-k28[H+][H2BO3-]
+&[H2BO3-]  *k27[H3BO3]  *-k28[H+][H2BO3-]
+
+k29 = -1
+k30 = -1
+&[H2BO3-] *-k29[H2BO3-] *k30[H+][HBO3--]
+&[H+] *k29[H2BO3-] *-k30[H+][HBO3--]
+&[HBO3--] *k29[H2BO3-] *-k30[H+][HBO3--]
+
+k31 = -1
+k32 = -1
+&[HBO3--] *-k31[HBO3--] *k32[H+][BO3---]
+&[H+] *k31[HBO3--] *-k32[H+][BO3---]
+&[BO3---] *k31[HBO3--] *-k32[H+][BO3---]
+
+k33 = -1
+k34 = -1
+&[Na2MoO4]  *-k33[Na2MoO4] *k34[Na][Na][MoO4--]
+&[Na]  *k33[Na2MoO4] *-k34[Na][Na][MoO4--]
+&[MoO4--]  *k33[Na2MoO4] *-k34[Na][Na][MoO4--]
+
+k35 = -1
+k36 = -1
+&[NaFeEDTA] *-k35[NaFeEDTA] *k36[Na+][FeEDTA-]
+&[Na+] *k35[NaFeEDTA] *-k36[Na+][FeEDTA-]
+&[FeEDTA-] *k35[NaFeEDTA] *-k36[Na+][FeEDTA-]
+
+k37 = -1
+&[FeEDTA-]  *-k37[FeEDTA-]
+&[Fe++] *k37[FeEDTA-]
+&[EDTA---]  *k37[FeEDTA-]
+
+k38 = -1
+k39 = -1
+&[Fe3(PO4)2]  *-k38[Fe3(PO4)2]  *k39[Fe++][Fe++][Fe++][PO4---][PO4---]
+&[Fe++] *k38[Fe3(PO4)2]  *-k39[Fe++][Fe++][Fe++][PO4---][PO4---]
+&[Fe++] *k38[Fe3(PO4)2]  *-k39[Fe++][Fe++][Fe++][PO4---][PO4---]
