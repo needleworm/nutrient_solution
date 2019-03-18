@@ -2,7 +2,7 @@ import numpy as np
 import math
 import random
 
-dt = 1e-4
+dt = 1e-5
 #Avogadro_constant = 6.02214129e23
 Avogadro_constant = 1
 
