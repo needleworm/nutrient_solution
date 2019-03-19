@@ -120,7 +120,7 @@ class Network():
                 self.record.append(np.copy(self.Xs))
                 self.show_result()
             count += 1
-            if mse < 1e-40 or math.isnan(mse):
+            if mse < 1e-19 or math.isnan(mse):
                 break
             previous = np.copy(self.Xs)
 
