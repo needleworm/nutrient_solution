@@ -17,7 +17,7 @@ Nutrient Solution Simulator
 
 ## 2. Dependencies
 * numpy library required.
-> pip install numpy" on bash.
+> pip install numpy on bash.
 
 
 ## 3 . Preperation of input file
