@@ -1,4 +1,6 @@
-&component_names  *star  *for *Terms  $initial_mol @molecular_weight add# for ion
+! &component_names  *star  *for *Terms  $initial_mol @molecular_weight   and ion_ends_with #
+! reacion_rate_starts_with k and interaction rate between plant and ion is p
+! '!' in front of the line indicates that this line is comment. 
 
 k0 = 1e-20
 k1 = 1e-6

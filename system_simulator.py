@@ -26,11 +26,11 @@ class Network():
 
     def _read_system(self, filename):
         network_file = open(filename, 'r')
-        network_file.readline() # remove header
-
         # reaction equation reading
         count = 0
         for line in network_file:
+            if line[0] == "!":
+                continue
             if line[0] == 'k':
                 k, value = line.strip().split("=")
                 self.ks[k.strip()] = float(value.strip())
