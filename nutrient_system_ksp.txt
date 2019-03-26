@@ -1,6 +1,9 @@
 ! &component_names  *star  *for *Terms  $initial_mol @molecular_weight   and ion_ends_with #
 ! reacion_rate_starts_with k
-! '!' in front of the line indicates that this line is comment. 
+! '!' in front of the line indicates that this line is comment.
+! VELOCITY for flow velocity in cm/s
+
+VELOCITY = 6
 
 k0 = 1e-20
 k1 = 1e-6

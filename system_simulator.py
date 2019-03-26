@@ -14,6 +14,7 @@ class Network():
         self.vesicles = []
         self.nameidx = {}
         self.ks = {}
+        self.flow_velocity = 0 # cm/s
         self._read_system(filename)
         self.Xs = np.zeros(len(self.vesicles))
         self.record = []
@@ -83,8 +84,11 @@ class Network():
                     self.vesicles.append(Vesicle(terms, initial_value, ion_molecular_weight, is_ion))
                 else:
                     self.vesicles[self.nameidx[name]].terms += terms
+            elif "VELOCITY" in line:
+                self.flow_velocity = float(line.split("=")[1].strip())
             else:
                 continue
+
 
     def _calc_gradient(self):
         gradient = np.zeros_like(self.Xs)
@@ -115,7 +119,7 @@ class Network():
             error = self.Xs - previous
             mse = np.sum(error * error)
             if count % 100000 == 0 :
-                print(str(count * dt) + " seconds past")
+                print(str(count * dt / (1 + self.flow_velocity)) + " seconds past")
                 print(str(count) + "th iteration\n>> current mse is : " + str(mse) + "\n")
                 self.record.append(np.copy(self.Xs))
                 self.show_result()
