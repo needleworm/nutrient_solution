@@ -3,8 +3,6 @@ import math
 import random
 
 dt = 1e-5
-#Avogadro_constant = 6.02214129e23
-Avogadro_constant = 1
 
 Vesicles = []
 
@@ -50,7 +48,7 @@ class Network():
                 if "$" in line:
                     line, value = line.split("$")
                     try:
-                        initial_value = float(value.strip()) * Avogadro_constant
+                        initial_value = float(value.strip())
                     except:
                         print (line + "  has wrong initial_mol indication")
                         exit(1)
@@ -131,9 +129,9 @@ class Network():
     def show_result(self):
         for name in self.nameidx:
             if not self.vesicles[self.nameidx[name]].is_ion:
-                    print("%15s@ : "%name + "  " + str(self.Xs[self.nameidx[name]]/Avogadro_constant) + " mol/L")
+                    print("%15s@ : "%name + "  " + str(self.Xs[self.nameidx[name]]) + " mol/L")
             else:
-                print("%15s  : "%name + "  " + str(self.Xs[self.nameidx[name]]/Avogadro_constant) + " mol/L")
+                print("%15s  : "%name + "  " + str(self.Xs[self.nameidx[name]]) + " mol/L")
         print("pH is\t: " + str(-math.log10(self.Xs[self.nameidx["[H+]"]])))
         print("TDS is\t: " + str(self.calc_ppm()) + " mg/L(ppm)\n")
 
