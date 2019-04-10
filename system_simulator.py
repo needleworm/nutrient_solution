@@ -2,7 +2,7 @@ import numpy as np
 import math
 import random
 
-dt = 1e-5
+dt = 1e-4
 
 Vesicles = []
 
@@ -79,7 +79,7 @@ class Network():
                 if name not in self.nameidx:
                     self.nameidx[name] = count
                     count += 1
-                    self.vesicles.append(Vesicle(terms, initial_value, ion_molecular_weight, is_ion))
+                    self.vesicles.append(Vesicle(name, terms, initial_value, ion_molecular_weight, is_ion))
                 else:
                     self.vesicles[self.nameidx[name]].terms += terms
             elif "VELOCITY" in line:
@@ -91,8 +91,7 @@ class Network():
     def _calc_gradient(self):
         gradient = np.zeros_like(self.Xs)
         for i, el in enumerate(self.vesicles):
-            gdnt = el.calc_gradient(self.Xs, self.nameidx)
-            gradient[i] = gdnt
+            gradient[i] = el.calc_gradient(self.Xs, self.nameidx)
         return gradient
 
     def synchronous_update(self):
@@ -100,7 +99,7 @@ class Network():
         #self.record.append(np.copy(self.Xs))
         self.Xs += gradient
         for i in range(len(self.Xs)):
-            if self.Xs[i] < 1e-300 :
+            if self.Xs[i] < 1e-100:
                 self.Xs[i] = 0
 
     def converge(self):
@@ -122,7 +121,7 @@ class Network():
                 self.record.append(np.copy(self.Xs))
                 self.show_result()
             count += 1
-            if mse < 1e-19 or math.isnan(mse):
+            if mse < 1e-30 or math.isnan(mse):
                 break
             previous = np.copy(self.Xs)
 
@@ -138,10 +137,9 @@ class Network():
     def calc_ppm(self):
         total_mass = 0
         for el in self.vesicles:
-            if not el.is_ion:
-                continue
-            total_mass += el.molecular_weight * el.value
-        return total_mass *1000
+            if el.is_ion:
+                total_mass += el.molecular_weight * el.value
+        return total_mass * 1000
 
 class Terms():
     def __init__(self, coefficient, elements):
@@ -159,7 +157,8 @@ class Terms():
 
 
 class Vesicle():
-    def __init__(self, terms, initial_value=0, molecular_weight=0, is_ion=True):
+    def __init__(self, name, terms, initial_value=0, molecular_weight=0, is_ion=True):
+        self.name = name
         self.value = initial_value
         self.terms = terms
         self.molecular_weight = molecular_weight
@@ -172,7 +171,8 @@ class Vesicle():
         dX_dt = 0
         for term in self.terms:
             dX_dt += term.term(Xs, nameidx)
-
         dX = dX_dt * dt
         self.value += dX
+        if self.value < 1e-100:
+            self.value = 0
         return dX
