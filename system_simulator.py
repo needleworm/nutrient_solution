@@ -8,7 +8,7 @@ Vesicles = []
 
 
 class Network():
-    def __init__(self, filename):
+    def __init__(self, filename, out_filename="result.csv"):
         self.vesicles = []
         self.nameidx = {}
         self.ks = {}
@@ -16,6 +16,7 @@ class Network():
         self._read_system(filename)
         self.Xs = np.zeros(len(self.vesicles))
         self.record = []
+        self.out_filename = out_filename
 
         for i, el in enumerate(self.vesicles):
             self.Xs[i] = el.value
@@ -102,10 +103,18 @@ class Network():
             if self.Xs[i] < 1e-100:
                 self.Xs[i] = 0
 
-    def converge(self):
+    def converge(self, coef_multiply = True, save_logs = True):
         previous = np.copy(self.Xs)
         brk = False
         count = 0
+
+        if save_logs:
+            res = open(self.out_filename, 'w')
+            name = []
+            for el in self.nameidx:
+                name.append(el)
+            res.write(", ".join(name) + "\n")
+
         while not brk:
             self.synchronous_update()
             for el in self.Xs:
@@ -113,17 +122,30 @@ class Network():
                     self.Xs = previous
                     brk = True
                     continue
+
             error = self.Xs - previous
             mse = np.sum(error * error)
-            if count % 100000 == 0 :
+
+            if count % 100 = 0 and save_logs:
+                res.write(self.Xs[0])
+                for i in range(len(self.Xs) - 1):
+                    res.write(", " + str(self.Xs[i+1]))
+                res.write("\n")
+
+            if count % 50000 == 0 :
                 print(str(count * dt / (1 + self.flow_velocity)) + " seconds past")
                 print(str(count) + "th iteration\n>> current mse is : " + str(mse) + "\n")
                 self.record.append(np.copy(self.Xs))
                 self.show_result()
+                if coef_multiply and mse < 1e-20:
+                    for el in self.vesicles:
+                        for term in el.terms:
+                            term.coefficient *= 1.5
             count += 1
-            if mse < 1e-30 or math.isnan(mse):
+            if mse < 1e-100 or math.isnan(mse):
                 break
             previous = np.copy(self.Xs)
+
 
     def show_result(self):
         for name in self.nameidx:
