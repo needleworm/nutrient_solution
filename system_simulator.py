@@ -88,7 +88,6 @@ class Network():
             else:
                 continue
 
-
     def _calc_gradient(self):
         gradient = np.zeros_like(self.Xs)
         for i, el in enumerate(self.vesicles):
@@ -126,7 +125,7 @@ class Network():
             error = self.Xs - previous
             mse = np.sum(error * error)
 
-            if count % 100 = 0 and save_logs:
+            if count % 100 == 0 and save_logs:
                 res.write(self.Xs[0])
                 for i in range(len(self.Xs) - 1):
                     res.write(", " + str(self.Xs[i+1]))
@@ -138,14 +137,12 @@ class Network():
                 self.record.append(np.copy(self.Xs))
                 self.show_result()
                 if coef_multiply and mse < 1e-20:
-                    for el in self.vesicles:
-                        for term in el.terms:
-                            term.coefficient *= 1.5
+                    dt *= 1.5
+
             count += 1
             if mse < 1e-100 or math.isnan(mse):
                 break
             previous = np.copy(self.Xs)
-
 
     def show_result(self):
         for name in self.nameidx:
@@ -162,6 +159,29 @@ class Network():
             if el.is_ion:
                 total_mass += el.molecular_weight * el.value
         return total_mass * 1000
+
+    def export_cytoscape(self, filename="cytoscape_form_export.csv"):
+        if filename[-4:] != ".csv":
+            filename += ".csv"
+        res = open(filename, 'w')
+        res.write("Target,Source,Interaction")
+        target_source_interaction = []
+        for vesicle in self.vesicles:
+            for term in vesicle.terms:
+                for elements in term.elements:
+                    if term.coefficient == 0:
+                        continue
+                    elif term.coefficient > 0:
+                        interaction = "1"
+                    else:
+                        interaction = "-1"
+
+                    if (vesicle.name[1:-1], elements[1:-1], interaction) in target_source_interaction:
+                        continue
+                    res.write(",".join((vesicle.name[1:-1], elements[1:-1], interaction)))
+                    res.write("\n")
+                    target_source_interaction.append((vesicle.name[1:-1], elements[1:-1], interaction))
+        res.close()
 
 class Terms():
     def __init__(self, coefficient, elements):
