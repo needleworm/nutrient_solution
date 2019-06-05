@@ -1,3 +1,8 @@
+"""
+Byunghyun Ban
+halfbottle@sangsang.farm
+"""
+
 import numpy as np
 import math
 import random
@@ -126,7 +131,7 @@ class Network():
             mse = np.sum(error * error)
 
             if count % 100 == 0 and save_logs:
-                res.write(self.Xs[0])
+                res.write(str(self.Xs[0]))
                 for i in range(len(self.Xs) - 1):
                     res.write(", " + str(self.Xs[i+1]))
                 res.write("\n")
