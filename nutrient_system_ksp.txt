@@ -3,7 +3,7 @@
 ! '!' in front of the line indicates that this line is comment.
 ! VELOCITY for flow velocity in cm/s
 
-VELOCITY = 6
+VELOCITY = 5
 
 k0 = 1e-20
 k1 = 1e-6
