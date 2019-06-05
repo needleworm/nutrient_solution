@@ -111,6 +111,7 @@ class Network():
         previous = np.copy(self.Xs)
         brk = False
         count = 0
+        global dt
 
         if save_logs:
             res = open(self.out_filename, 'w')
