@@ -7,7 +7,7 @@ import numpy as np
 import math
 import random
 
-dt = 1e-4
+dt = 1e-8
 
 Vesicles = []
 
@@ -107,7 +107,7 @@ class Network():
             if self.Xs[i] < 1e-100:
                 self.Xs[i] = 0
 
-    def converge(self, coef_multiply = True, save_logs = True):
+    def converge(self, coef_multiply = False, save_logs = True):
         previous = np.copy(self.Xs)
         brk = False
         count = 0
