@@ -6,6 +6,7 @@ halfbottle@sangsang.farm
 import numpy as np
 import math
 import random
+import time
 
 dt = 1e-8
 
@@ -108,6 +109,7 @@ class Network():
                 self.Xs[i] = 0
 
     def converge(self, coef_multiply = False, save_logs = True):
+        time_start = time.time()
         previous = np.copy(self.Xs)
         brk = False
         count = 0
@@ -146,7 +148,8 @@ class Network():
                     dt *= 1.5
 
             count += 1
-            if mse < 1e-100 or math.isnan(mse):
+            if mse < 1e-30 or math.isnan(mse):
+                print("The simulation took " + str(time.time() - time_start) + " seconds.")
                 break
             previous = np.copy(self.Xs)
 

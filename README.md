@@ -11,6 +11,11 @@ Nutrient Solution Simulator
 * bhban@kaist.ac.kr
 * halfbottle@sangsang.farm
 
+
+# Citation
+Ban, B., Lee, M., & Ryu, D. (2019). ODE network model for nonlinear and complex agricultural nutrient solution system. arXiv preprint arXiv:1907.10800.
+
+
 ## 1. Environments
 * Python3
 * Don't support any problems from python2 environment
