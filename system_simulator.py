@@ -8,7 +8,8 @@ import math
 import random
 import time
 
-dt = 1e-8
+dt = 1e-6
+MSE = 1e-23
 
 Vesicles = []
 
@@ -148,7 +149,9 @@ class Network():
                     dt *= 1.5
 
             count += 1
-            if mse < 1e-30 or math.isnan(mse):
+            if mse < MSE or math.isnan(mse):
+                print("******** Simulation Done ********")
+                self.show_result()
                 print("The simulation took " + str(time.time() - time_start) + " seconds.")
                 break
             previous = np.copy(self.Xs)
