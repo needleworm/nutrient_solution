@@ -8,7 +8,7 @@ import math
 import random
 import time
 
-dt = 1e-6
+dt = 5e-4
 MSE = 1e-23
 
 Vesicles = []
@@ -153,6 +153,11 @@ class Network():
                 print("******** Simulation Done ********")
                 self.show_result()
                 print("The simulation took " + str(time.time() - time_start) + " seconds.")
+                print("MSE is " + str(MSE))
+                a = open(self.out_filename[:-4] + "txt")
+                a.write("******** Simulation Done ********")
+                self.write_result(a)
+                a.close()
                 break
             previous = np.copy(self.Xs)
 
@@ -164,6 +169,15 @@ class Network():
                 print("%15s  : "%name + "  " + str(self.Xs[self.nameidx[name]]) + " mol/L")
         print("pH is\t: " + str(-math.log10(self.Xs[self.nameidx["[H+]"]])))
         print("TDS is\t: " + str(self.calc_ppm()) + " mg/L(ppm)\n")
+
+    def write_result(self, file):
+        for name in self.nameidx:
+            if not self.vesicles[self.nameidx[name]].is_ion:
+                    file.write("%15s@ : "%name + "  " + str(self.Xs[self.nameidx[name]]) + " mol/L")
+            else:
+                file.write("%15s  : "%name + "  " + str(self.Xs[self.nameidx[name]]) + " mol/L")
+        file.write("pH is\t: " + str(-math.log10(self.Xs[self.nameidx["[H+]"]])))
+        file.write("TDS is\t: " + str(self.calc_ppm()) + " mg/L(ppm)\n")
 
     def calc_ppm(self):
         total_mass = 0
