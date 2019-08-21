@@ -152,11 +152,14 @@ class Network():
             if mse < MSE or math.isnan(mse):
                 print("******** Simulation Done ********")
                 self.show_result()
-                print("The simulation took " + str(time.time() - time_start) + " seconds.")
+                current_time = time.time()
+                print("The simulation took " + str(current_time - time_start) + " seconds.")
                 print("MSE is " + str(MSE))
-                a = open(self.out_filename[:-4] + "txt")
-                a.write("******** Simulation Done ********")
+                a = open(self.out_filename[:-3] + "txt", 'w')
+                a.write("******** Simulation Done ********\n")
                 self.write_result(a)
+                a.write("The simulation took " + str(current_time - time_start) + " seconds.\n")
+                a.write("MSE is " + str(MSE))
                 a.close()
                 break
             previous = np.copy(self.Xs)
@@ -173,10 +176,10 @@ class Network():
     def write_result(self, file):
         for name in self.nameidx:
             if not self.vesicles[self.nameidx[name]].is_ion:
-                    file.write("%15s@ : "%name + "  " + str(self.Xs[self.nameidx[name]]) + " mol/L")
+                    file.write("%15s@ : "%name + "  " + str(self.Xs[self.nameidx[name]]) + " mol/L\n")
             else:
-                file.write("%15s  : "%name + "  " + str(self.Xs[self.nameidx[name]]) + " mol/L")
-        file.write("pH is\t: " + str(-math.log10(self.Xs[self.nameidx["[H+]"]])))
+                file.write("%15s  : "%name + "  " + str(self.Xs[self.nameidx[name]]) + " mol/L\n")
+        file.write("pH is\t: " + str(-math.log10(self.Xs[self.nameidx["[H+]"]])) + "\n")
         file.write("TDS is\t: " + str(self.calc_ppm()) + " mg/L(ppm)\n")
 
     def calc_ppm(self):
