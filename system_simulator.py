@@ -8,7 +8,7 @@ import math
 import random
 import time
 
-dt = 5e-4
+dt = 1e-6
 MSE = 1e-23
 
 Vesicles = []
