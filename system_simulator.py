@@ -10,6 +10,9 @@ import time
 
 dt = 1e-6
 MSE = 1e-23
+R = 8.3144
+T = 273+18
+F = 96485.332
 
 Vesicles = []
 
@@ -18,7 +21,13 @@ class Network():
     def __init__(self, filename, out_filename="result.csv"):
         self.vesicles = []
         self.nameidx = {}
+        self.is_plant = False
         self.ks = {}
+        self.Bs = {}
+        self.Ms = {}
+        self.Ns = {}
+        self.Q = 0
+        self.Vm_past = 0
         self.flow_velocity = 0 # cm/s
         self._read_system(filename)
         self.Xs = np.zeros(len(self.vesicles))
@@ -41,6 +50,17 @@ class Network():
             if line[0] == 'k':
                 k, value = line.strip().split("=")
                 self.ks[k.strip()] = float(value.strip())
+            elif line[0] == 'B':
+                b, value = line.strip().split("=")
+                self.Bs[b.strip()] = float(value.strip())
+            elif line[0] == 'M':
+                m, value = line.strip().split("=")
+                self.Ms[m.strip()] = float(value.strip())
+            elif line[0] == 'N':
+                n, value = line.strip().split("=")
+                self.Ns[n.strip()] = float(value.strip())
+            elif line[0] == 'Q':
+                self.Q = float(line.strip().split("=")[1])
             elif line[0] == "&":
                 initial_value = 0
                 ion_molecular_weight = 0
@@ -90,6 +110,58 @@ class Network():
                     self.vesicles.append(Vesicle(name, terms, initial_value, ion_molecular_weight, is_ion))
                 else:
                     self.vesicles[self.nameidx[name]].terms += terms
+            elif line[0] == '=':
+                # cation absorption at plant root
+                if not self.is_plant:
+                    self.is_plant = True
+                if line[2] != "p":
+                    continue
+                initial_value = 0
+                ion_molecular_weight = 0
+                is_ion = False
+                if "#" in line:
+                    line = line.split("#")[0].strip()
+                    is_ion = True
+                if "@" in line:
+                    line, value = line.split("@")
+                    ion_molecular_weight = float(value.strip())
+                splt = line.split("*")
+                name = splt[0][1:].strip()
+
+                splt = splt[1:]
+                terms = []
+                terms.append(self.Q)
+                for el in splt:
+                    el = el.strip()
+                    if "B" in el:
+                        if el[0] == "-":
+                            terms.append(-1*self.Bs[el[1:]])
+                        else:
+                            terms.append(self.Bs[el])
+                    elif "M" in el:
+                        if el[0] == "-":
+                            terms.append(-1*self.Ms[el[1:]])
+                        else:
+                            terms.append(self.Ms[el])
+                    elif "N" in el:
+                        if el[0] == "-":
+                            terms.append(-1*self.Ns[el[1:]])
+                        else:
+                            terms.append(self.Ns[el])
+
+                if len(terms) != 4:
+                    print("This line has wrong format.\n")
+                    print(line)
+                    exit(1)
+                if name not in self.nameidx:
+                    self.nameidx[name] = count
+                    count += 1
+                    self.vesicles.append(Vesicle_cation(name, terms, initial_value, ion_molecular_weight, is_ion))
+                else:
+                    print("This ion appears twice. Cation absorption with H+ secondary transportation of this ion is already listed.\n")
+                    print(line)
+                    exit(1)
+
             elif "VELOCITY" in line:
                 self.flow_velocity = float(line.split("=")[1].strip())
             else:
@@ -97,8 +169,21 @@ class Network():
 
     def _calc_gradient(self):
         gradient = np.zeros_like(self.Xs)
+        if self.is_plant:
+            H_out = self.nameidx["[H+]"]
+            H_in = self.nameidx["[pH+]"]
+            Vm = -1 * R*T/F * math.log(H_out/H_in)
+            if self.Vm_past == 0:
+                self.Vm_past = Vm
+            dVm = Vm - self.Vm_past
+            dVm_dt = dVm/dt
         for i, el in enumerate(self.vesicles):
-            gradient[i] = el.calc_gradient(self.Xs, self.nameidx)
+            if self.is_plant and el.is_cation:
+                gradient[i] = el.calc_gradient(self.Xs, self.nameidx, Vm, dVm_dt)
+                counterpart = "[" + el.name[2:]
+                gradient[self.nameidx[counterpart]] -= gradient[i]
+            else:
+                gradient[i] = el.calc_gradient(self.Xs, self.nameidx)
         return gradient
 
     def synchronous_update(self):
@@ -234,6 +319,7 @@ class Vesicle():
         self.terms = terms
         self.molecular_weight = molecular_weight
         self.is_ion = is_ion
+        self.is_cation = False
 
     def __repr__(self):
         return str(self.terms)
@@ -242,6 +328,32 @@ class Vesicle():
         dX_dt = 0
         for term in self.terms:
             dX_dt += term.term(Xs, nameidx)
+        dX = dX_dt * dt
+        self.value += dX
+        if self.value < 1e-100:
+            self.value = 0
+        return dX
+
+
+class Vesicle_cation():
+    def __init__(self, name, terms, initial_value=0, molecular_weight=0, is_ion=True):
+        self.name = name
+        self.value = initial_value
+        self.terms = terms
+        self.molecular_weight = molecular_weight
+        self.is_ion = is_ion
+        self.is_cation = True
+
+    def __repr__(self):
+        return str(self.terms)
+
+    def calc_gradient(self, Xs, nameidx, Vm, dVm_dt):
+        dX_dt = 0
+        Q, B, M, N = self.terms
+        coefficient = Q * B * math.sqrt(M) /(N * math.sqrt(N))
+        if Vm < 0:
+            return 0
+        dX_dt = coefficient / math.sqrt(Vm) * dVm_dt
         dX = dX_dt * dt
         self.value += dX
         if self.value < 1e-100:

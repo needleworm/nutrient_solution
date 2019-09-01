@@ -5,7 +5,7 @@
 ! @molecular_weight 
 ! ion_ends_with #
 ! reacion_rate_starts_with k
-! cation absorption equation starts with &&
+! cation absorption equation starts with =
 ! VELOCITY for flow velocity in cm/s
 
 VELOCITY = 5
@@ -184,86 +184,89 @@ k0001 = 1e-6
 
 ! hydrogen emittion
 k0002 = 1e-6
-&[H+] = *k0002[pH+]
-&[pH+] = *-k0002[H+]
+&[H+] *k0002[pH+]
+&[pH+] *-k0002[H+] #
 
 ! anion absorption (symport)
 k0003 = 1e-6
-&[NO3-] = *-k0003[NO3-][H+]
-&[pNO3-] = *k0003[NO3-][H+]
+&[NO3-]  *-k0003[NO3-][H+]
+&[pNO3-]  *k0003[NO3-][H+] @62.004 #
 
 k0004 = 1e-6
-&[H2BO3-] = *-k0004[H2BO3-][H+]
-&[pH2BO3-] = *k0004[H2BO3-][H+]
+&[H2BO3-]  *-k0004[H2BO3-][H+]
+&[pH2BO3-]  *k0004[H2BO3-][H+] @60.823 #
 
 k0005 = 1e-6
-&[H2PO4-] = *-k0005[H2PO4-][H+]
-&[pH2PO4-] = *k0005[H2PO4-][H+]
+&[H2PO4-]  *-k0005[H2PO4-][H+]
+&[pH2PO4-]  *k0005[H2PO4-][H+] @96.986 #
 
 k0006 = 1e-6
-&[MoO4--] = *-k0006[MoO4--][H+][H+]
-&[pMoO4--] = *k0006[MoO4--][H+][H+]
+&[MoO4--]  *-k0006[MoO4--][H+][H+]
+&[pMoO4--]  *k0006[MoO4--][H+][H+] @159.946 #
 
 k0007 = 1e-6
-&[FeEDTA-] = *k0007[FeEDTA-][H+]
-&[pFeEDTA-] = *-k0007[FeEDTA-][H+]
+&[FeEDTA-]  *k0007[FeEDTA-][H+]
+&[pFeEDTA-]  *-k0007[FeEDTA-][H+] @344.057 #
 
 k0008 = 1e-6
-&[SO4--] = *k0008[SO4--][H+][H+]
-&[pSO4--] = *-k0008[SO4--][H+][H+]
+&[SO4--]  *k0008[SO4--][H+][H+] 
+&[pSO4--]  *-k0008[SO4--][H+][H+] @96.056 #
 
 
 ! cation absorption
-! coefficients are Q, B, M, k. 
+! coefficients are Q, B, M, N. N is the number of electron which the ion lost.
 ! The voltage gradient is simplified with H+ ion gradient only.
 ! Q is Da/SF^1.5.
 ! Q is common for all ion.
+! The conutepart of [pION] is actually not read during the computational process.
+
+
 Q = 1e-9
 
 B1 = 1e-6
 M1 = 18.039
-k1 = 1
-&&[NH4+] = *-B1  *-M1  *-k1
-&&[pNH4+] = *B1  *M1  *k1
+N1 = 1
+=[NH4+]  *-B1  *-M1  *-N1 #
+=[pNH4+]  *B1  *M1  *N1 @18.039 #
 
 B2 = 1e-6
 M2 = 39.098
-k2 = 1
-&&[K+] = *-B2  *-M2  *-k2
-&&[pK+] = *B2  *M2  *k2
+N = 1
+=[K+] *-B2  *-M2  *-N #
+=[pK+]  *B2  *M2  *N @39.098 #
 
 B3 = 1e-6
 M3 = 54.938
-k3 = 2
-&&[Mn++] = *-B3  *-M3  *-k3
-&&[pMn++] = *B3  *M3  *k3
+N3 = 2
+=[Mn++]  *-B3  *-M3  *-N3 #
+=[pMn++]  *B3  *M3  *N3 @54.938 #
 
 B4 = 1e-6
 M4 = 63.546
-k4 = 2
-&&[Cu++] = *-B4  *-M4  *-k4
-&&[pCu++] = *B4  *M4  *k4
+N4 = 2
+=[Cu++]  *-B4  *-M4  *-N4 #
+=[pCu++]  *B4  *M4  *N4 @63.546 #
 
 B5 = 1e-6
 M5 = 65.379
-k5 = 2
-&&[Zn++] = *-B5  *-M5  *-k5
-&&[pZn++] = *B5  *M5  *k5
+N5 = 2
+=[Zn++]  *-B5  *-M5  *-N5 #
+=[pZn++]  *B5  *M5  *N5 @65.379 #
 
 B6 = 1e-6
 M6 = 24.305
-k6 = 2
-&&[Mg++] = *-B6  *-M6  *-k6
-&&[pMg++] = *B6  *M6  *k6
+N6 = 2
+=[Mg++]  *-B6  *-M6  *-N6 #
+=[pMg++]  *B6  *M6  *N6 @24.305 #
 
 B7 = 1e-6
 M7 = 22.99
-k7 = 1
-&&[Na+] = *-B7  *-M7  *-k7
-&&[pNa+] = *B7  *M7  *k7
+N7 = 1
+=[Na+]  *-B7  *-M7  *-N7 #
+=[pNa+]  *B7  *M7  *N7 @22.989769 #
 
 B8 = 1e-6
 M8 = 40.078
-k8 = 2
-&&[Ca++] = *-B8  *-M8  *-k8
-&&[pCa++] = *B8  *M8  *k8
+N8 = 2
+=[Ca++]  *-B8  *-M8  *-N8 #
+=[pCa++]  *B8  *M8  *N8 @40.078 #
