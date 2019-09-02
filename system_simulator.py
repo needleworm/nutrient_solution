@@ -170,12 +170,13 @@ class Network():
     def _calc_gradient(self):
         gradient = np.zeros_like(self.Xs)
         if self.is_plant:
-            H_out = self.nameidx["[H+]"]
-            H_in = self.nameidx["[pH+]"]
-            Vm = -1 * R*T/F * math.log(H_out/H_in)
+            H_out = self.vesicles[self.nameidx["[H+]"]].value
+            H_in = self.vesicles[self.nameidx["[pH+]"]].value
+            Vm = R*T/F * math.log(H_out/H_in)
             if self.Vm_past == 0:
                 self.Vm_past = Vm
             dVm = Vm - self.Vm_past
+            self.Vm_past = Vm
             dVm_dt = dVm/dt
         for i, el in enumerate(self.vesicles):
             if self.is_plant and el.is_cation:
@@ -256,7 +257,10 @@ class Network():
             else:
                 print("%15s  : "%name + "  " + str(self.Xs[self.nameidx[name]]) + " mol/L")
         print("pH is\t: " + str(-math.log10(self.Xs[self.nameidx["[H+]"]])))
-        print("TDS is\t: " + str(self.calc_ppm()) + " mg/L(ppm)\n")
+        print("TDS is\t: " + str(self.calc_ppm()) + " mg/L(ppm)")
+        if self.is_plant:
+            print("pH inside the plant is\t: " + str(-math.log10(self.Xs[self.nameidx["[pH+]"]])))
+            print("TDS inside the plant is\t: " + str(self.calc_ppm_plant()) + "mg/L(ppm)\n")
 
     def write_result(self, file):
         for name in self.nameidx:
@@ -266,12 +270,26 @@ class Network():
                 file.write("%15s  : "%name + "  " + str(self.Xs[self.nameidx[name]]) + " mol/L\n")
         file.write("pH is\t: " + str(-math.log10(self.Xs[self.nameidx["[H+]"]])) + "\n")
         file.write("TDS is\t: " + str(self.calc_ppm()) + " mg/L(ppm)\n")
+        if self.is_plant:
+            file.write("TDS inside the plant is\t: " + str(self.calc_ppm_plant()) + "mg/L(ppm)\n")
+
+    def calc_ppm_plant(self):
+        total_mass = 0
+        for el in self.vesicles:
+            if el.is_ion and el.name.startswith("[p"):
+                total_mass += el.molecular_weight * el.value
+        return total_mass * 1000
 
     def calc_ppm(self):
         total_mass = 0
-        for el in self.vesicles:
-            if el.is_ion:
-                total_mass += el.molecular_weight * el.value
+        if self.is_plant:
+            for el in self.vesicles:
+                if el.is_ion and not el.name.startswith("[p"):
+                    total_mass += el.molecular_weight * el.value
+        else:
+            for el in self.vesicles:
+                if el.is_ion:
+                    total_mass += el.molecular_weight * el.value
         return total_mass * 1000
 
     def export_cytoscape(self, filename="cytoscape_form_export.csv"):
@@ -351,9 +369,9 @@ class Vesicle_cation():
         dX_dt = 0
         Q, B, M, N = self.terms
         coefficient = Q * B * math.sqrt(M) /(N * math.sqrt(N))
-        if Vm < 0:
+        if Vm <= 0:
             return 0
-        dX_dt = coefficient / math.sqrt(Vm) * dVm_dt
+        dX_dt = -1 * coefficient / math.sqrt(Vm) * dVm_dt
         dX = dX_dt * dt
         self.value += dX
         if self.value < 1e-100:
