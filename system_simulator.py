@@ -373,6 +373,8 @@ class Vesicle_cation():
             return 0
         dX_dt = -1 * coefficient / math.sqrt(Vm) * dVm_dt
         dX = dX_dt * dt
+        if dX <= 0:
+            return 0
         self.value += dX
         if self.value < 1e-100:
             self.value = 0
