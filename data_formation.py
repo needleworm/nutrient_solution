@@ -77,7 +77,7 @@ TRAINING_X = np.asarray(TRAINING_X)
 TRAINING_Y = np.asarray(TRAINING_Y)
 
 print("The size of Training Data is : " + str(len(TRAINING_X)))
-print("The size of Test Data is : " + str(len(Test_X)))
+print("The size of Test Data is : " + str(len(TEST_X)))
 
 np.save("test_X.npy", TEST_X)
 np.save("test_Y.npy", TEST_Y)
