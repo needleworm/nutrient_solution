@@ -9,7 +9,7 @@ import random
 import time
 
 dt = 1e-6
-MSE = 1e-23
+MSE = 1e-22
 R = 8.3144
 T = 273+18
 F = 96485.332
@@ -180,7 +180,7 @@ class Network():
             dVm_dt = dVm/dt
         for i, el in enumerate(self.vesicles):
             if self.is_plant and el.is_cation:
-                gradient[i] = el.calc_gradient(self.Xs, self.nameidx, Vm, dVm_dt)
+                gradient[i] = el.calc_gradient(Vm, dVm_dt)
                 counterpart = "[" + el.name[2:]
                 gradient[self.nameidx[counterpart]] -= gradient[i]
             else:
@@ -315,6 +315,17 @@ class Network():
                     target_source_interaction.append((vesicle.name[1:-1], elements[1:-1], interaction))
         res.close()
 
+    def byunghyun_coefficients(self):
+        retList = []
+        for el in self.vesicles:
+            if el.name.startswith("[p"):
+                if not el.is_cation:
+                    retList.append(el.terms[0].coefficient)
+                if el.is_cation:
+                    retList.append(el.terms[1])
+        return np.asarray(retList)
+
+
 class Terms():
     def __init__(self, coefficient, elements):
         self.coefficient = coefficient
@@ -365,8 +376,7 @@ class Vesicle_cation():
     def __repr__(self):
         return str(self.terms)
 
-    def calc_gradient(self, Xs, nameidx, Vm, dVm_dt):
-        dX_dt = 0
+    def calc_gradient(self, Vm, dVm_dt):
         Q, B, M, N = self.terms
         coefficient = Q * B * math.sqrt(M) /(N * math.sqrt(N))
         if Vm <= 0:
