@@ -32,7 +32,6 @@ numElements = 0
 DATA_tuple = []
 for i, el in enumerate(resultFiles):
     txt = open(el)
-    print("reading " + el + "...")
     first_line = txt.readline()
     if not numElements:
         numElements = len(first_line.split(","))
@@ -47,9 +46,9 @@ for i, el in enumerate(resultFiles):
         Y = byunghyun_coeficients[i]
         DATA_tuple.append((X, Y))
         count += 1
-    print(str(count) + " data from " + el)
+    print(str(count) + " data from " + el + "\n")
 
-print("Total " + str(len(DATA_tuple)) + " date prepared.")
+print("Total " + str(len(DATA_tuple)) + " date prepared.\n")
 
 
 random.shuffle(DATA_tuple)
