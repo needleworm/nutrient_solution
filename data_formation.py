@@ -46,6 +46,7 @@ for i, el in enumerate(resultFiles):
         X = INITIAL_STATE - np.asarray(splt, dtype=np.float64)
         Y = byunghyun_coeficients[i]
         DATA_tuple.append((X, Y))
+    print(str(i) + " data from " + el)
 
 print("Total " + str(len(DATA_tuple)) + " date prepared.")
 
