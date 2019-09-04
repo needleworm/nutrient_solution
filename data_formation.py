@@ -47,7 +47,7 @@ for i, el in enumerate(resultFiles):
         Y = byunghyun_coeficients[i]
         DATA_tuple.append((X, Y))
 
-print("Total " + str(len(DATA_tuple) + " date prepared."))
+print("Total " + str(len(DATA_tuple)) + " date prepared.")
 
 
 random.shuffle(DATA_tuple)
