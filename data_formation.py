@@ -47,6 +47,9 @@ for i, el in enumerate(resultFiles):
         Y = byunghyun_coeficients[i]
         DATA_tuple.append((X, Y))
 
+print("Total " + str(len(DATA_tuple) + " date prepared."))
+
+
 random.shuffle(DATA_tuple)
 
 num_test_data = int(len(DATA_tuple)/5)
@@ -72,7 +75,12 @@ TEST_Y = np.asarray(TEST_Y)
 TRAINING_X = np.asarray(TRAINING_X)
 TRAINING_Y = np.asarray(TRAINING_Y)
 
+print("The size of Training Data is : " + str(len(TRAINING_X)))
+print("The size of Test Data is : " + str(len(Test_X)))
+
 np.save("test_X.npy", TEST_X)
 np.save("test_Y.npy", TEST_Y)
 np.save("training_X.npy", TRAINING_X)
-np.save("training_X.npy", TRAINING_Y)
+np.save("training_Y.npy", TRAINING_Y)
+
+print("DATA SAVED")
