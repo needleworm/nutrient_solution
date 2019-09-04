@@ -32,11 +32,11 @@ numElements = 0
 DATA_tuple = []
 for i, el in enumerate(resultFiles):
     txt = open(el)
-    print("reading + " + el + "...")
+    print("reading " + el + "...")
     first_line = txt.readline()
     if not numElements:
         numElements = len(first_line.split(","))
-
+    count = 0
     for line in txt:
         splt = line.strip().split(", ")
         if len(splt) != numElements:
@@ -46,7 +46,8 @@ for i, el in enumerate(resultFiles):
         X = INITIAL_STATE - np.asarray(splt, dtype=np.float64)
         Y = byunghyun_coeficients[i]
         DATA_tuple.append((X, Y))
-    print(str(i) + " data from " + el)
+        count += 1
+    print(str(count) + " data from " + el)
 
 print("Total " + str(len(DATA_tuple)) + " date prepared.")
 
