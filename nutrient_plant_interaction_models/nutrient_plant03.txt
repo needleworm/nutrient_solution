@@ -1,0 +1,287 @@
+! '!' in front of the line indicates that this line is comment.
+! &component_names  
+! *star  *for *Terms 
+! $initial_mol
+! @molecular_weight 
+! ion_ends_with #
+! reacion_rate_starts_with k
+! cation absorption equation starts with =
+! VELOCITY for flow velocity in cm/s
+
+VELOCITY = 5
+
+
+k0 = 1e-20
+k1 = 1e-6
+&[H2O]  *-k0[H2O]  *k1[H+][OH-] $55.408519678680754 @18.01528
+&[H+]  *k0[H2O]  *-k1[H+][OH-]  $1e-7 @1.008  #
+&[OH-]  *k0[H2O]  *-k1[H+][OH-] $1e-7 @17.007 #
+
+k2 = 1426.460597
+k3 = 0
+&[KNO3] *-k2[KNO3] *k3[K+][NO3-]  $0.004 @101.102
+&[K+] *k2[KNO3] *-k3[K+][NO3-]  @39.098 #
+&[NO3-] *k2[KNO3] *-k3[K+][NO3-] @62.004 #
+
+k4 = 267.9232594
+k5 = 0
+k4222 = 535.8465188
+&[Ca(NO3)2] *-k4[Ca(NO3)2]  *k5[Ca++][NO3-][NO3-] $0.001  @164.086
+&[Ca++] *k4[Ca(NO3)2] *-k5[Ca++][NO3-][NO3-] #
+&[NO3-] *k4222[Ca(NO3)2] *-k5[Ca++][NO3-][NO3-] #
+
+k6 = 1226.220473
+k7 = 0
+&[NH4H2PO4] *-k6[NH4H2PO4]  *k7[NH4+][H2PO4-] $0.0005 @115.025
+&[NH4+] *k6[NH4H2PO4]  *-k7[NH4+][H2PO4-] @18.039 #
+&[H2PO4-] *k6[NH4H2PO4]  *-k7[NH4+][H2PO4-] @96.986 #
+
+k8 = 874.3744201
+k9 = 0
+&[MgSO4]  *-k8[MgSO4]  *k9[Mg++][SO4--] $0.0005  @120.361
+&[Mg++]  *k8[MgSO4]  *-k9[Mg++][SO4--]  @24.305 #
+&[SO4--]  *k8[MgSO4]  *-k9[Mg++][SO4--] @96.056 #
+
+k10 = 6.0123141
+k11 = 0
+&[NaFeEDTA] *-k10[NaFeEDTA] *k11[Na+][FeEDTA-]  $7.12434e-05  @367.047
+&[Na+] *k10[NaFeEDTA] *-k11[Na+][FeEDTA-] @22.989769  #
+&[FeEDTA-] *k10[NaFeEDTA] *-k11[Na+][FeEDTA-] @344.057  #
+
+k12 = 5.7e-9
+k13 = 10
+&[H3BO3]  *-k12[H3BO3]  *k13[H+][H2BO3-]  $4.85178e-5 @61.831
+&[H+]  *k12[H3BO3]  *-k13[H+][H2BO3-] #
+&[H2BO3-]  *k12[H3BO3]  *-k13[H+][H2BO3-] @60.823 #
+
+k14 = 1768.902038
+k15 = 0
+&[MnSO4]  *-k14[MnSO4] *k15[Mn++][SO4--]  $8.96613e-6 @150.994
+&[Mn++]  *k14[MnSO4] *-k15[Mn++][SO4--] @54.938 #
+&[SO4--]  *k14[MnSO4] *-k15[Mn++][SO4--] #
+
+k16 = 1269.596873
+k17 = 0
+&[ZnSO4]  *-k16[ZnSO4]  *k17[Zn++][SO4--] $1.73883e-6 @161.436
+&[Zn++]  *k16[ZnSO4]  *-k17[Zn++][SO4--]  @65.379 #
+&[SO4--]  *k16[ZnSO4]  *-k17[Zn++][SO4--] #
+
+k18 = 1888.493451
+k19 = 0
+&[CuSO4]  *-k18[CuSO4] *k19[Cu++][SO4--]  $4.00505e-7 @159.602
+&[Cu++]  *k18[CuSO4] *-k19[Cu++][SO4--] @63.546 #
+&[SO4--]  *k18[CuSO4] *-k19[Cu++][SO4--] #
+
+k20 = 1246.780346
+k21 = 0
+&[Na2MoO4]  *-k20[Na2MoO4] *k21[Na+][Na+][MoO4--] $7.19429e-8 @205.926
+&[Na+]  *k20[Na2MoO4] *-k21[Na+][Na+][MoO4--] @22.99  #
+&[MoO4--]  *k20[Na2MoO4] *-k21[Na+][Na+][MoO4--]  @159.946  #
+
+k22 = 2300
+k23 = 0
+&[HNO3] *-k22[HNO3]  *k23[H+][NO3-]  $0.000001 @63.012
+&[H+] *k22[HNO3] *-k23[H+][NO3-] #
+&[NO3-] *k22[HNO3] *-k23[H+][NO3-]  @62.004 #
+
+k24 = 0.007079458
+k25 = 1
+&[H+]  *k24[H3PO4] *-k25[H+][H2PO4-] #
+&[H2PO4-]  *k24[H3PO4] *-k25[H+][H2PO4-] #
+&[H3PO4]  *-k24[H3PO4] *k25[H+][H2PO4-] @97.994
+
+k26 = 8.12831E-08
+k27 = 1
+&[H2PO4-] *-k26[H2PO4-]  *k27[H+][HPO4--] @96.987 #
+&[H+] *k26[H2PO4-]  *-k27[H+][HPO4--] #
+&[HPO4--] *k26[H2PO4-]  *-k27[H+][HPO4--]  @95.978 #
+
+k28 = 4.7863E-13
+k29 = 1
+&[HPO4--] *-k28[HPO4--] *k29[H+][PO4---] #
+&[H+] *k28[HPO4--] *-k29[H+][PO4---] #
+&[PO4---] *k28[HPO4--] *-k29[H+][PO4---]  @94.97  #
+
+k30 = 2.14787E-06
+k31 = 1
+&[Ca++] *k30[CaHPO4]  *-k31[Ca++][HPO4--] @40.078 #
+&[HPO4--] *k30[CaHPO4]  *-k31[Ca++][HPO4--] #
+&[CaHPO4] *-k30[CaHPO4]  *k31[Ca++][HPO4--] @136.056
+
+k32 = 9.22057E-26
+k33 = 1
+k322 = 1.844114e-25
+&[Ca++] *k32[Ca3(PO4)2]  *-k33[Ca++][Ca++][Ca++][PO4---][PO4---] #
+&[PO4---] *k322[Ca3(PO4)2]  *-k33[Ca++][Ca++][Ca++][PO4---][PO4---] #
+&[Ca3(PO4)2]  *-k32[Ca3(PO4)2]  *k33[Ca++][Ca++][Ca++][PO4---][PO4---]  @310.174
+
+k34 = 1e-14
+k35 = 1
+&[H2BO3-] *-k34[H2BO3-] *k35[H+][HBO3--] @60.83 #
+&[H+] *k34[H2BO3-] *-k35[H+][HBO3--] #
+&[HBO3--] *k34[H2BO3-] *-k35[H+][HBO3--]  @59.815 #
+
+k36 = 1.6e-19
+k37 = 1
+&[HBO3--] *-k36[HBO3--] *k37[H+][BO3---] #
+&[H+] *k36[HBO3--] *-k37[H+][BO3---] #
+&[BO3---] *k36[HBO3--] *-k37[H+][BO3---]  @58.807 #
+
+k38 = 0.001e-3
+&[FeEDTA-]  *-k38[FeEDTA-] #
+&[Fe++] *k38[FeEDTA-] @55.845 #
+&[EDTA---]  *k38[FeEDTA-] @289.22 #
+
+k39 = 1e-18
+k40 = 1
+k392 = 2e-18
+k393 = 3e-18
+&[Fe++] *k393[Fe3(PO4)2]  *-k40[Fe++][Fe++][Fe++][PO4---][PO4---] #
+&[PO4---] *k392[Fe3(PO4)2]  *-k40[Fe++][Fe++][Fe++][PO4---][PO4---] #
+&[Fe3(PO4)2]  *-k39[Fe3(PO4)2]  *k40[Fe++][Fe++][Fe++][PO4---][PO4---]  @357.475
+
+k41 = 1e-18
+k42 = 1
+&[Fe++] *k41[FeHPO4] *-k42[Fe++][HPO4--] #
+&[HPO4--] *k41[FeHPO4] *-k42[Fe++][HPO4--] #
+&[FeHPO4] *-k41[FeHPO4] *k42[Fe++][HPO4--]  @151.823
+
+k43 = 0.000225379
+k44 = 1
+&[CaSO4]  *-k43[CaSO4]  *k44[Ca++][SO4--] @136.134
+&[Ca++]  *k43[CaSO4]  *-k44[Ca++][SO4--] #
+&[SO4--]  *k43[CaSO4]  *-k44[Ca++][SO4--] #
+
+k45 = 0.002473486
+k46 = 1
+k452 = 0.004946972
+&[Ca++] *k45[Ca(H2PO4)2] *-k46[Ca++][H2PO4-][H2PO4-] #
+&[H2PO4-] *k452[Ca(H2PO4)2] *-k46[Ca++][H2PO4-][H2PO4-] #
+&[Ca(H2PO4)2] *-k45[Ca(H2PO4)2] *k46[Ca++][H2PO4-][H2PO4-]  @234.05
+
+k47 = 0.000001479
+k48 = 1
+&[Mg++] *k47[MgHPO4]  *-k48[Mg++][HPO4--] @24.305 #
+&[HPO4--] *k47[MgHPO4]  *-k48[Mg++][HPO4--] #
+&[MgHPO4] *-k47[MgHPO4]  *k48[Mg++][HPO4--] @120.2843
+
+k49 = 5.248E-24
+k50 = 1
+k492 =1.0496e-23 
+&[Mg++] *k49[Mg3(PO4)2]  *-k50[Mg++][Mg++][Mg++][PO4---][PO4---] #
+&[PO4---] *k492[Mg3(PO4)2]  *-k50[Mg++][Mg++][Mg++][PO4---][PO4---] #
+&[Mg3(PO4)2]  *-k49[Mg3(PO4)2]  *k50[Mg++][Mg++][Mg++][PO4---][PO4---]  @262.8577
+
+
+! plant nutrient interaction terms
+! consider the plant as a bag of water, 1 L volume.
+! components inside the plant has indicator p
+k0000 = 1e-20
+k0001 = 1e-6
+&[pH2O]  *-k0000[pH2O]  *k0001[pH+][pOH-] $55.408519678680754 @18.01528
+&[pH+]  *k0000[pH2O]  *-k0001[pH+][pOH-]  $1e-7 @1.008  #
+&[pOH-]  *k0000[pH2O]  *-k0001[pH+][pOH-] $1e-7 @17.007 #
+
+! hydrogen emittion
+k0002 = 1000
+&[H+] *k0002[pH+] 
+&[pH+] *-k0002[pH+]  #
+
+
+! anion absorption (symport)
+k0003 = 140000
+&[H+] *-k0003[NO3-][H+]
+&[pH+] *k0003[NO3-][H+]
+&[NO3-]  *-k0003[NO3-][H+]
+&[pNO3-]  *k0003[NO3-][H+] @62.004 #
+
+k0004 = 20000
+&[H+] *-k0004[H2BO3-][H+]
+&[pH+] *k0004[H2BO3-][H+]
+&[H2BO3-]  *-k0004[H2BO3-][H+]
+&[pH2BO3-]  *k0004[H2BO3-][H+] @60.823 #
+
+k0005 = 40000
+&[H+]  *-k0005[H2PO4-][H+]
+&[pH+]  *k0005[H2PO4-][H+]
+&[H2PO4-]  *-k0005[H2PO4-][H+]
+&[pH2PO4-]  *k0005[H2PO4-][H+] @96.986 #
+
+k0006 = 70000
+k20006 = 140000
+&[H+]  *-k20006[MoO4--][H+][H+]
+&[pH+]  *k20006[MoO4--][H+][H+]
+&[MoO4--]  *-k0006[MoO4--][H+][H+]
+&[pMoO4--]  *k0006[MoO4--][H+][H+] @159.946 #
+
+k0007 = 80000
+&[H+]  *-k0007[FeEDTA-][H+]
+&[pH+]  *k0007[FeEDTA-][H+]
+&[FeEDTA-]  *-k0007[FeEDTA-][H+]
+&[pFeEDTA-]  *k0007[FeEDTA-][H+] @344.057 #
+
+k0008 = 110000
+k20008 = 220000
+&[H+]  *-k20008[SO4--][H+][H+] 
+&[pH+]  *k20008[SO4--][H+][H+] 
+&[SO4--]  *-k0008[SO4--][H+][H+] 
+&[pSO4--]  *k0008[SO4--][H+][H+] @96.056 #
+
+
+! cation absorption
+! coefficients are Q, B, M, N. N is the number of electron which the ion lost.
+! The voltage gradient is simplified with H+ ion gradient only.
+! Q is Da/SF^1.5.
+! Q is common for all ion.
+! The conutepart of [pION] is actually not read during the computational process.
+
+
+Q = 1e-9
+
+B1 = 19000
+M1 = 18.039
+N1 = 1
+=[NH4+]  *-B1  *-M1  *-N1 #
+=[pNH4+]  *B1  *M1  *N1 @18.039 #
+
+B2 = 18000
+M2 = 39.098
+N = 1
+=[K+] *-B2  *-M2  *-N #
+=[pK+]  *B2  *M2  *N @39.098 #
+
+B3 = 14000
+M3 = 54.938
+N3 = 2
+=[Mn++]  *-B3  *-M3  *-N3 #
+=[pMn++]  *B3  *M3  *N3 @54.938 #
+
+B4 = 7000
+M4 = 63.546
+N4 = 2
+=[Cu++]  *-B4  *-M4  *-N4 #
+=[pCu++]  *B4  *M4  *N4 @63.546 #
+
+B5 = 8000
+M5 = 65.379
+N5 = 2
+=[Zn++]  *-B5  *-M5  *-N5 #
+=[pZn++]  *B5  *M5  *N5 @65.379 #
+
+B6 = 9000
+M6 = 24.305
+N6 = 2
+=[Mg++]  *-B6  *-M6  *-N6 #
+=[pMg++]  *B6  *M6  *N6 @24.305 #
+
+B7 = 26000
+M7 = 22.99
+N7 = 1
+=[Na+]  *-B7  *-M7  *-N7 #
+=[pNa+]  *B7  *M7  *N7 @22.989769 #
+
+B8 = 17000
+M8 = 40.078
+N8 = 2
+=[Ca++]  *-B8  *-M8  *-N8 #
+=[pCa++]  *B8  *M8  *N8 @40.078 #
