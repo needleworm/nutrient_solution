@@ -9,7 +9,7 @@ import random
 import time
 
 dt = 1e-6
-MSE = 1e-22
+MSE = 1e-20
 R = 8.3144
 T = 273+18
 F = 96485.332
@@ -271,6 +271,7 @@ class Network():
         file.write("pH is\t: " + str(-math.log10(self.Xs[self.nameidx["[H+]"]])) + "\n")
         file.write("TDS is\t: " + str(self.calc_ppm()) + " mg/L(ppm)\n")
         if self.is_plant:
+            file.write("pH inside the plant is\t: " + str(-math.log10(self.Xs[self.nameidx["[pH+]"]])))
             file.write("TDS inside the plant is\t: " + str(self.calc_ppm_plant()) + "mg/L(ppm)\n")
 
     def calc_ppm_plant(self):
@@ -299,20 +300,22 @@ class Network():
         res.write("Target,Source,Interaction")
         target_source_interaction = []
         for vesicle in self.vesicles:
-            for term in vesicle.terms:
-                for elements in term.elements:
-                    if term.coefficient == 0:
-                        continue
-                    elif term.coefficient > 0:
-                        interaction = "1"
-                    else:
-                        interaction = "-1"
+            if not vesicle.is_cation:
+                for term in vesicle.terms:
+                    for elements in term.elements:
+                        if term.coefficient == 0:
+                            continue
+                        elif term.coefficient > 0:
+                            interaction = "1"
+                        else:
+                            interaction = "-1"
 
-                    if (vesicle.name[1:-1], elements[1:-1], interaction) in target_source_interaction:
-                        continue
-                    res.write(",".join((vesicle.name[1:-1], elements[1:-1], interaction)))
-                    res.write("\n")
-                    target_source_interaction.append((vesicle.name[1:-1], elements[1:-1], interaction))
+                        if (vesicle.name[1:-1], elements[1:-1], interaction) in target_source_interaction:
+                            continue
+                        res.write(",".join((vesicle.name[1:-1], elements[1:-1], interaction)))
+                        res.write("\n")
+                        target_source_interaction.append((vesicle.name[1:-1], elements[1:-1], interaction))
+
         res.close()
 
     def byunghyun_coefficients(self):

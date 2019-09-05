@@ -12,6 +12,8 @@ for el in lstdr:
         networkQuery.append(el)
 networkQuery.sort()
 
+print(str(len(networkQuery)) + " network query files found.")
+
 byunghyun_coeficients = []
 for el in networkQuery:
     temp_network = ss.Network(el)
@@ -27,17 +29,20 @@ for el in lstdr:
         resultFiles.append(el)
 resultFiles.sort()
 
-numElements = 0
+print(str(len(resultFiles)) + " simulation result files found.")
 
+numElements = 0
+print("start data processing...\n")
 DATA_tuple = []
 for i, el in enumerate(resultFiles):
     txt = open(el)
-    first_line = txt.readline()
-    if not numElements:
-        numElements = len(first_line.split(","))
     count = 0
     for line in txt:
-        splt = line.strip().split(", ")
+        splt = line.strip().split(",")
+        if numElements == 0:
+            numElements = len(splt)
+        if "[" in line:
+            continue
         if len(splt) != numElements:
             print(el + " has wrong line")
             print(line)
@@ -46,9 +51,10 @@ for i, el in enumerate(resultFiles):
         Y = byunghyun_coeficients[i]
         DATA_tuple.append((X, Y))
         count += 1
-    print(str(count) + " data from " + el + "\n")
+    txt.close()
+    print(str(count) + " data from " + el)
 
-print("Total " + str(len(DATA_tuple)) + " date prepared.\n")
+print("\nTotal " + str(len(DATA_tuple)) + " date prepared.\n")
 
 
 random.shuffle(DATA_tuple)
