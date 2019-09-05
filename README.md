@@ -41,6 +41,19 @@ $ is for initial molar density
 
 @ is for molecular weight
 
+ion ends with #
+
+cation absorption equation starts with =
+
+cation absorption equation has Q, B, M, N.
+
+Q is Da/SF^1.5
+
+N is the number of electron an cation lost.
+
+The ions inside the plant has indicator 'p' in front of names.
+
+
 Differential equations which contains reaction rate constant k should follow after k indicators.
 
 To hanlde a component which appears on differnt differential equations; you don't have to combine those equations into one line. This model automatically does it.
@@ -60,5 +73,16 @@ You may just import the module on you source code.
 ## 7. Convergence
 >network.converge()
 
-## 8. Results
+## 8. Show Results
 >network.show_result()
+
+## 9. Write Results
+>network.write_result(filename)
+
+## 10. Export network file as Cytoscae form
+>network.export_cytoscape
+
+It does not work when cation absorption model is applied.
+
+## 11. Show list of physiological terms
+>network.byunghyun_coefficients()
