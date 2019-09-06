@@ -4,13 +4,15 @@ import system_simulator as ss
 import random
 
 resultdir = "nutrient_plant_interaction_results/"
-lstdr = os.listdir(resultdir)
+networkdir = "nutrient_plant_interaction_models/"
+reslst = os.listdir(resultdir)
+modlst = os.listdir(networkdir)
 
 # Network_files handling
 networkQuery = []
-for el in lstdr:
+for el in modlst:
     if "nutrient_plant" in el and "txt" in el and "result" not in el:
-        networkQuery.append(resultdir + el)
+        networkQuery.append(networkdir + el)
 networkQuery.sort()
 
 print(str(len(networkQuery)) + " network query files found.")
@@ -25,7 +27,7 @@ del(temp_network)
 
 # Result_files handling
 resultFiles = []
-for el in lstdr:
+for el in reslst:
     if "result" in el and "csv" in el:
         resultFiles.append(resultdir + el)
 resultFiles.sort()
