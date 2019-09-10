@@ -34,9 +34,11 @@ for el in networkQuery:
     byunghyun_coeficients.append(temp_network.byunghyun_coefficients()[2:])
     # Water dissociation is not plant-ion interaction.
 
+MOLECULAR_WEIGHT = temp_network.molecular_weight
+NON_ION_IDXs = temp_network.non_ion_idxs
+
 if ISE_observable not in "TruetrueTRUE":
     INITIAL_STATE = temp_network.Xs
-    MOLECULAR_WEIGHT = temp_network.molecular_weight
 else:
     i_no3 = temp_network.nameidx["[NO3-]"]
     i_ca = temp_network.nameidx["[Ca++]"]
@@ -45,7 +47,6 @@ else:
     i_h = temp_network.nameidx["[H+]"]
     OBSERVABLE_IDXs = [i_no3, i_ca, i_k, i_nh4, i_h]
     OBSERVABLE_IDXs.sort()
-    MOLECULAR_WEIGHT = temp_network.molecular_weight[OBSERVABLE_IDXs]
     INITIAL_STATE = temp_network.Xs[OBSERVABLE_IDXs]
 del(temp_network)
 
@@ -75,11 +76,13 @@ for i, el in enumerate(resultFiles):
             print(el + " has wrong line")
             print(line)
             continue
+        current_concentrations = np.asarray(splt, dtype=np.float64)
         if ISE_observable not in "TruetrueTRUE":
-            X = INITIAL_STATE - np.asarray(splt, dtype=np.float64)
+            X = INITIAL_STATE - current_concentrations
         else:
-            X = INITIAL_STATE - np.asarray(splt, dtype=np.float64)[OBSERVABLE_IDXs]
-        TDS = X*MOLECULAR_WEIGHT
+            X = INITIAL_STATE - current_concentrations[OBSERVABLE_IDXs]
+        current_concentrations[NON_ION_IDXs] = 0
+        TDS = np.dot(MOLECULAR_WEIGHT, current_concentrations)
         X = np.append(X, TDS)
         Y = byunghyun_coeficients[i]
         DATA_tuple.append((X, Y))
@@ -116,8 +119,8 @@ TEST_Y = np.asarray(TEST_Y)
 TRAINING_X = np.asarray(TRAINING_X)
 TRAINING_Y = np.asarray(TRAINING_Y)
 
-print("The size of Training Data is : " + str(len(TRAINING_X)))
-print("The size of Test Data is : " + str(len(TEST_X)))
+print("The size of Training Data is : " + str(TRAINING_X.shape))
+print("The size of Test Data is : " + str(TEST_X.shape))
 
 print("DATA SAVED")
 

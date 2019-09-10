@@ -29,10 +29,13 @@ class Network():
         self.Q = 0
         self.Vm_past = 0
         self.flow_velocity = 0 # cm/s
+        self.molecular_weight = []
         self._read_system(filename)
         self.Xs = np.zeros(len(self.vesicles))
         self.record = []
         self.out_filename = out_filename
+        self.molecular_weight = np.asarray(self.molecular_weight)
+        self.non_ion_idxs = self.find_non_ions()
 
         for i, el in enumerate(self.vesicles):
             self.Xs[i] = el.value
@@ -108,6 +111,7 @@ class Network():
                     self.nameidx[name] = count
                     count += 1
                     self.vesicles.append(Vesicle(name, terms, initial_value, ion_molecular_weight, is_ion))
+                    self.molecular_weight.append(ion_molecular_weight)
                 else:
                     self.vesicles[self.nameidx[name]].terms += terms
             elif line[0] == '=':
@@ -157,6 +161,7 @@ class Network():
                     self.nameidx[name] = count
                     count += 1
                     self.vesicles.append(Vesicle_cation(name, terms, initial_value, ion_molecular_weight, is_ion))
+                    self.molecular_weight.append(ion_molecular_weight)
                 else:
                     print("This ion appears twice. Cation absorption with H+ secondary transportation of this ion is already listed.\n")
                     print(line)
@@ -166,6 +171,15 @@ class Network():
                 self.flow_velocity = float(line.split("=")[1].strip())
             else:
                 continue
+
+    def find_non_ions(self):
+        retval = []
+        for el in self.vesicles:
+            if el.name.startswith("[p"):
+                continue
+            if el.is_ion:
+                retval.append(self.nameidx[el.name])
+        return retval
 
     def _calc_gradient(self):
         gradient = np.zeros_like(self.Xs)
