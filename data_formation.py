@@ -2,9 +2,19 @@ import numpy as np
 import os
 import system_simulator as ss
 import random
+import sys
 
-resultdir = "nutrient_plant_interaction_results/"
-networkdir = "nutrient_plant_interaction_models/"
+resultdir = sys.argv[1]
+networkdir = sys.argv[2]
+normalize = sys.argv[3]
+ISE_observable = sys.argv[4]
+
+if not resultdir.endswith("/"):
+    resultdir += "/"
+
+if not networkdir.endswith("/"):
+    networkdir += "/"
+
 reslst = os.listdir(resultdir)
 modlst = os.listdir(networkdir)
 
@@ -20,9 +30,22 @@ print(str(len(networkQuery)) + " network query files found.")
 byunghyun_coeficients = []
 for el in networkQuery:
     temp_network = ss.Network(el)
-    byunghyun_coeficients.append(temp_network.byunghyun_coefficients())
+    byunghyun_coeficients.append(temp_network.byunghyun_coefficients()[2:])
+    # Water dissociation is not plant-ion interaction.
 
-INITIAL_STATE = temp_network.Xs
+if ISE_observable not in "TruetrueTRUE":
+    INITIAL_STATE = temp_network.Xs
+    MOLECULAR_WEIGHT = temp_network.molecular_weight
+else:
+    i_no3 = temp_network.nameidx["[NO3-]"]
+    i_ca = temp_network.nameidx["[Ca++]"]
+    i_k = temp_network.nameidx["[K+]"]
+    i_nh4 = temp_network.nameidx["[NH4+]"]
+    i_h = temp_network.nameidx["[H+]"]
+    OBSERVABLE_IDXs = [i_no3, i_ca, i_k, i_nh4, i_h]
+    OBSERVABLE_IDXs.sort()
+    MOLECULAR_WEIGHT = temp_network.molecular_weight[OBSERVABLE_IDXs]
+    INITIAL_STATE = temp_network.Xs[OBSERVABLE_IDXs]
 del(temp_network)
 
 # Result_files handling
@@ -37,6 +60,7 @@ print(str(len(resultFiles)) + " simulation result files found.")
 numElements = 0
 print("start data processing...\n")
 DATA_tuple = []
+
 for i, el in enumerate(resultFiles):
     txt = open(el)
     count = 0
@@ -50,12 +74,18 @@ for i, el in enumerate(resultFiles):
             print(el + " has wrong line")
             print(line)
             continue
-        X = INITIAL_STATE - np.asarray(splt, dtype=np.float64)
+        if ISE_observable not in "TruetrueTRUE":
+            X = INITIAL_STATE - np.asarray(splt, dtype=np.float64)
+        else:
+            X = INITIAL_STATE - np.asarray(splt, dtype=np.float64)[OBSERVABLE_IDXs]
+        TDS = X*MOLECULAR_WEIGHT
+        X = np.append(X, TDS)
         Y = byunghyun_coeficients[i]
         DATA_tuple.append((X, Y))
         count += 1
     txt.close()
     print(str(count) + " data from " + el)
+
 
 print("\nTotal " + str(len(DATA_tuple)) + " date prepared.\n")
 
@@ -88,9 +118,43 @@ TRAINING_Y = np.asarray(TRAINING_Y)
 print("The size of Training Data is : " + str(len(TRAINING_X)))
 print("The size of Test Data is : " + str(len(TEST_X)))
 
-np.save("test_X.npy", TEST_X)
-np.save("test_Y.npy", TEST_Y)
-np.save("training_X.npy", TRAINING_X)
-np.save("training_Y.npy", TRAINING_Y)
-
 print("DATA SAVED")
+
+if normalize in "TRUEtrueTrue":
+    print("NORMALIZATION...")
+    TEST_X -= np.min(TEST_X)
+    TEST_X /= np.max(TEST_X)
+
+    TRAINING_X -= np.min(TRAINING_X)
+    TRAINING_X /= np.max(TRAINING_X)
+
+    TEST_Y = np.log10(TEST_Y)
+    TEST_Y -= np.min(TEST_Y)
+    TEST_Y /= np.max(TEST_Y)
+
+    TRAINING_Y = np.log10(TRAINING_Y)
+    TRAINING_Y -= np.min(TRAINING_Y)
+    TRAINING_Y /= np.max(TRAINING_Y)
+
+filename_test_x = "test_X.npy"
+filename_test_y = "test_y.npy"
+filename_training_x = "training_X.npy"
+filename_training_y = "training_Y.npy"
+
+if ISE_observable in "TruetrueTRUE":
+    filename_test_x = "ISE_obs_" + filename_test_X
+    filename_test_y = "ISE_obs_" + filename_test_y
+    filename_training_x = "ISE_obs_" + filename_training_x
+    filename_training_y = "ISE_obs_" + filename_training_y
+
+if normalize in "TruetrueTRUE":
+    filename_test_x = "Normalized_" + filename_test_X
+    filename_test_y = "Normalized_" + filename_test_y
+    filename_training_x = "Normalized_" + filename_training_x
+    filename_training_y = "Normalized_" + filename_training_y
+
+
+np.save(filename_test_x, TEST_X)
+np.save(filename_test_y, TEST_Y)
+np.save(filename_training_x, TRAINING_X)
+np.save(filename_training_y, TRAINING_Y)

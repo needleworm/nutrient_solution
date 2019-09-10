@@ -86,3 +86,26 @@ It does not work when cation absorption model is applied.
 
 ## 11. Show list of physiological terms
 >network.byunghyun_coefficients()
+
+
+## 12. Build Training Data and Test Data
+>python data_formation.py <result_dir> <network_dir> <normalization> <ISE_observable>
+
+result_dir : Directory where the result .csv files are stored.
+
+network_dir : Directory where the network files used for the simulation are stored.
+
+normalization : A boolean value. If True, it normalizes the data.
+
+  X -= np.min(X)
+  X /= np.max(X)
+
+  Y = np.log10(Y)
+
+  Y -= np.min(y)
+
+  Y /= np.max(Y)
+
+ ISE_observable : A boolean value. If false, all components are processed. If True, only the components below are processed as X values.
+
+ > (NH4+, NO3-, K+, Ca++, pH, TDS_of_nutrient_solution)
