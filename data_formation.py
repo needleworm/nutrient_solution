@@ -23,6 +23,7 @@ networkQuery = []
 for el in modlst:
     if "nutrient_plant" in el and "txt" in el and "result" not in el:
         networkQuery.append(networkdir + el)
+
 networkQuery.sort()
 
 print(str(len(networkQuery)) + " network query files found.")
@@ -142,13 +143,13 @@ filename_training_x = "training_X.npy"
 filename_training_y = "training_Y.npy"
 
 if ISE_observable in "TruetrueTRUE":
-    filename_test_x = "ISE_obs_" + filename_test_X
+    filename_test_x = "ISE_obs_" + filename_test_x
     filename_test_y = "ISE_obs_" + filename_test_y
     filename_training_x = "ISE_obs_" + filename_training_x
     filename_training_y = "ISE_obs_" + filename_training_y
 
 if normalize in "TruetrueTRUE":
-    filename_test_x = "Normalized_" + filename_test_X
+    filename_test_x = "Normalized_" + filename_test_x
     filename_test_y = "Normalized_" + filename_test_y
     filename_training_x = "Normalized_" + filename_training_x
     filename_training_y = "Normalized_" + filename_training_y
