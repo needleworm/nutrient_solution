@@ -1,4 +1,4 @@
-Nutrient Solution Simulator
+Nutrient Solution Simulator and plant simulator
 ========================
 
 # AUTHOR
@@ -13,7 +13,15 @@ Nutrient Solution Simulator
 
 
 # Citation
-Ban, B., Lee, M., & Ryu, D. (2019). ODE network model for nonlinear and complex agricultural nutrient solution system. arXiv preprint arXiv:1907.10800.
+* For nutrient solution simulation only
+
+> Ban, B., Lee, M., & Ryu, D. (2019). ODE network model for nonlinear and complex agricultural nutrient solution system. arXiv preprint arXiv:1907.10800.
+
+* For plant-included simulation (please cite both of them)
+
+> Ban, B., Lee, M., & Ryu, D. (2019). ODE network model for nonlinear and complex agricultural nutrient solution system. arXiv preprint arXiv:1907.10800.
+
+> Ban, B. Mathematical Model for Secondary Transport of Cations at the Root of Plants. Preprints 2019, 2019090219 (doi: 10.20944/preprints201909.0219.v1).
 
 
 ## 1. Environments
